@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  db:
+    image: mysql
+    container_name: mysql-image-statec
+    environment: 
+      MYSQL_ROOT_PASSWORD:  testStatec
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./DB/Data:/var/lib/mysql
+    restart: always
+  api:
+    build: "."
+    container_name: node-container
+    restart: always
+    volumes:
+      - .:/home/node/app
+    ports: 
+      - "9001:9001"
+    depends_on: 
+      - db
