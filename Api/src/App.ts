@@ -2,7 +2,7 @@ import express from "express";
 import { resolve } from "path";
 import cors from "cors";
 import { config } from "dotenv";
-import Route from "@Routes/index";
+import Route from "./Routes";
 
 class App {
   public express: express.Application;

@@ -1,3 +1,12 @@
-FROM node:15-slim
+FROM node:alpine
+
 WORKDIR /home/node/app
-CMD [ "npx prisma migrate save --experimental","npx prisma migrate up --experimental","npm install","npm start" ]
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000 
+
+CMD ["npm","start"]
