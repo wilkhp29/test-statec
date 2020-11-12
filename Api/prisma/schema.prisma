@@ -11,16 +11,26 @@ generator client {
 }
 
 model Usuario {
-  id          Int     @id @default(autoincrement())
-  email       String  @unique
-  password    String
-  tokenDevice String
-  grupos      grupos? @relation(fields: [gruposId], references: [id])
-  gruposId    Int?
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
+  password  String
+  Grupos    Grupos?     @relation(fields: [gruposId], references: [id])
+  gruposId  Int?
+  Mensagens Mensagens[]
 }
 
-model grupos {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  Usuarios Usuario[]
+model Mensagens {
+  id        Int     @id @default(autoincrement())
+  mensagens String
+  Grupos    Grupos? @relation(fields: [gruposId], references: [id])
+  gruposId  Int?
+  Usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+}
+
+model Grupos {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  Usuarios  Usuario[]
+  Mensagens Mensagens[]
 }

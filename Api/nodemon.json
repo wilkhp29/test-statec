@@ -2,6 +2,6 @@
   "watch": ["src"],
   "ext": "ts",
   "execMap": {
-    "ts": "node  -r ts-node/register -r tsconfig-paths/register --inspect=9129 ./src/server.ts"
+    "ts": "node  -r ts-node/register --inspect=9129 ./src/server.ts"
   }
 }
