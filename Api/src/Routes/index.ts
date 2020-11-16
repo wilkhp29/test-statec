@@ -4,11 +4,6 @@ import GruposController from "../Controller/GruposController";
 
 const route = Router();
 
-route.get("/",async (req, res) =>
-{ 
-  return res.status(200).send("Hello word");
-});
-
 route.post("/login", AuthController.index);
 route.post("/register",AuthController.store);
 route.get("/grupo",AuthController.authenticateJWT,GruposController.findAll);
@@ -17,6 +12,6 @@ route.get("/grupo/:id/mensagens",AuthController.authenticateJWT,GruposController
 route.post("/grupo/:id/mensagens",AuthController.authenticateJWT,GruposController.sendMensagem);
 route.get("/grupo/:id/join",AuthController.authenticateJWT,GruposController.join);
 route.put("/grupo",AuthController.authenticateJWT,GruposController.update);
-route.delete("/grupo",AuthController.authenticateJWT,GruposController.delete);
+route.delete("/grupo/:id",AuthController.authenticateJWT,GruposController.delete);
 
 export default route;

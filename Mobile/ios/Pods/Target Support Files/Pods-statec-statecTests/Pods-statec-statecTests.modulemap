@@ -1,0 +1,6 @@
+module Pods_statec_statecTests {
+  umbrella header "Pods-statec-statecTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

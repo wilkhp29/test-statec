@@ -1,8 +1,8 @@
 
-import { PrismaClient, PrismaClientOptions, Usuario } from "@prisma/client";
+import { PrismaClient, Usuario } from "@prisma/client";
 import { Request, Response } from "express";
 import {Client} from "onesignal-node"
-import { Socket } from "socket.io";
+import {  Socket,Server } from "socket.io";
 
 interface reqGrupo {
   name:string;
@@ -29,11 +29,11 @@ class GruposController {
   public async sendMensagem(req: Request, res: Response){
     const {id} = req.params;
     const {msg,user,socket} = req.body
-    
     const mensagem = await db.mensagens.create({data:{mensagens:msg,Usuario:{connect:{id:user.id}},Grupos:{connect:{id:Number(id)}}},include:{Grupos:true,Usuario:true}})
 
-    const response = await onesignal.createNotification({contents:{'en': `O usuario ${user.email} se juntou ao grupo ${mensagem.Grupos?.name}`}, included_segments: ['Subscribed Users'],filters:[{field: 'tag', key: 'gropo', relation: '=', value: mensagem.Grupos?.name}]})
-    socket.emit("mensagem",mensagem);
+    const response = await onesignal.createNotification({contents:{'en': ` ${user.email} envio uma mensagem no grupo ${mensagem.Grupos?.name}`},filters:[{field: 'tag', key: 'grupo', relation: '=', value: mensagem.Grupos?.name}]})
+    const so:Server = socket;
+    so.emit("mensagem",mensagem);
 
     return res.status(201).send()
   }
@@ -43,8 +43,9 @@ class GruposController {
     const {id} = req.params;
 
     const grupo = await db.grupos.update({where:{id:Number(id)},data:{Usuarios:{connect:{id:user.id}}},include:{Usuarios:true}})
-    
-    const response = await onesignal.createNotification({contents:{'en': `O usuario ${user.email} se juntou ao grupo ${grupo.name}`}, included_segments: ['Subscribed Users'],filters:[{field: 'tag', key: 'gropo', relation: '=', value: grupo.name}]})
+   
+      const {body} = await onesignal.createNotification({contents:{'en': `O usuario ${user.email} se juntou ao grupo ${grupo.name}`},filters:[{field: 'tag', key: 'grupo', relation: '=', value: grupo.name}]})
+      
     socket.emit("join",{grupo,user});
     
     return res.status(200).send(grupo);
@@ -68,10 +69,13 @@ class GruposController {
 
   public async delete(req: Request, res: Response){
     const {id} = req.params;
+    try{
+     const grupo = await db.grupos.delete({where:{id:Number(id)}});
 
-
-    await db.grupos.delete({where:{id:Number(id)}});
-    return res.status(201);
+      return res.status(200).send(grupo);
+    }catch(erro){
+      return res.status(200);
+    }
   }
 }
 

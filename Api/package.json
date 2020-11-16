@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "start:compose": "docker-compose up -d",
     "dev": "nodemon src/server.ts",
     "db:init": "docker build -t mysql-img -f ./prisma/DockerFile . && docker run -p 3306:3306 -d --rm --name statec-db mysql-img",
@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "onesignal-node": "^3.2.0",
-    "socket.io": "^3.0.1"
+    "socket.io": "2.3.0"
   },
   "devDependencies": {
     "@prisma/cli": "^2.11.0",

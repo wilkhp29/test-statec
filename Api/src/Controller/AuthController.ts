@@ -42,7 +42,7 @@ class AuthController {
 
     const cryptPass = await hash(password, 10);
     
-    const user = await db.usuario.upsert({where:{email},create:{email, password:cryptPass},update:{email,password:cryptPass},include:{Grupos:true}});
+    const user = await db.usuario.upsert({where:{email},create:{email, password:cryptPass},update:{email,password:cryptPass},include:{Grupos:{include:{Mensagens:{include:{Usuario:true}}}}}});
 
     const token = sign({ id: user?.id }, process.env.SECRET!, {
       expiresIn: 32400,

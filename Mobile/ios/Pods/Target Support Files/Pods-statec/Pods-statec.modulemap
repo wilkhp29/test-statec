@@ -1,0 +1,6 @@
+module Pods_statec {
+  umbrella header "Pods-statec-umbrella.h"
+
+  export *
+  module * { export * }
+}

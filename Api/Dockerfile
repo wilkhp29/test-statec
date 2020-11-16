@@ -1,12 +1,12 @@
-FROM node:alpine
+FROM node:latest
 
 WORKDIR /home/node/app
 
 COPY package*.json ./
-RUN npm install
+RUN yarn install
 
 COPY . .
 
 EXPOSE 3000 
 
-CMD ["npm","start"]
+CMD ["yarn","start"]
