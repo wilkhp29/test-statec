@@ -35,7 +35,6 @@ const Conversas = () => {
     setLoading(true);
     try {
       const { data } = await api.get(`grupo/${Grupo?.id}/mensagens`);
-      console.log("dados", data);
       addMensagens(data);
     } finally {
       setLoading(false);
@@ -43,14 +42,23 @@ const Conversas = () => {
   }, []);
 
   const userOn = useCallback(async () => {
-    const user = await getUser();
-    setUser(user);
+    try {
+      const user = await getUser();
+      setUser(user);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const sendMensage = useCallback(async () => {
+    if (msg.trim() === "") {
+      return;
+    }
     setLoading(true);
     try {
-      const { data } = await api.post(`grupo/${Grupo?.id}/mensagens`, { msg });
+      const { data } = await api.post(`grupo/${Grupo?.id}/mensagens`, {
+        msg: msg.trim(),
+      });
       setMsg("");
     } finally {
       setLoading(false);
@@ -59,19 +67,12 @@ const Conversas = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: Grupo?.name });
-  }, [navigation]);
+    userOn();
+  }, [navigation, userOn]);
 
   useEffect(() => {
     getMensagem();
   }, [getMensagem]);
-
-  useEffect(() => {
-    userOn();
-  }, [userOn]);
-
-  useEffect(() => {
-    console.log("mensagens", Mensagens);
-  }, [Mensagens]);
 
   return (
     <Container>
@@ -84,14 +85,18 @@ const Conversas = () => {
               <All>{mensagem.mensagens}</All>
             ) : (
               <Other>
-                {mensagem.Usuario.email} diz:{mensagem.mensagens}
+                {mensagem.Usuario?.email} diz:{mensagem.mensagens}
               </Other>
             )}
           </>
         ))}
       </Scroll>
       <ContainerInput>
-        <Input value={msg} onChangeText={(text) => setMsg(text)} />
+        <Input
+          value={msg}
+          onChangeText={(text) => setMsg(text)}
+          onSubmitEditing={() => sendMensage()}
+        />
         <Button title="send" onPress={() => sendMensage()} />
       </ContainerInput>
     </Container>

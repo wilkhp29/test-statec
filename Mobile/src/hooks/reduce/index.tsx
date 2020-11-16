@@ -16,7 +16,7 @@ export interface grupo {
   Mensagens: Array<mensagem>;
 }
 
-interface mensagem {
+export interface mensagem {
   id: number;
   mensagens: string;
   Usuario: user | null;
@@ -90,8 +90,9 @@ const addMensagens = (state: init, Mensagens: Array<mensagem>): init => {
 };
 
 const addMensagen = (state: init, Mensagen: mensagem): init => {
+  debugger;
   const Mensagens = state.Mensagens.filter(
-    (mensagem) => JSON.stringify(mensagem) === JSON.stringify(Mensagen)
+    (mensagem) => JSON.stringify(mensagem) !== JSON.stringify(Mensagen)
   );
   Mensagens.push(Mensagen);
   return { ...state, Mensagens };
@@ -133,11 +134,12 @@ export const useAppReduce = () => {
 
   const selectGrupo = useCallback((grupo: grupo) => {
     dispath({ type: Types.selectGrupo, payload: { grupo } });
+
+    OneSignal.sendTag("grupo", grupo.name);
   }, []);
 
   const addGrupo = useCallback((grupo: grupo) => {
     dispath({ type: Types.addGrupo, payload: { grupo } });
-    OneSignal.tag("grupo", grupo.name);
   }, []);
 
   const removeGrupo = useCallback((grupo: grupo) => {
@@ -149,6 +151,7 @@ export const useAppReduce = () => {
   }, []);
 
   const addMensagen = useCallback((mensagen: mensagem) => {
+    debugger;
     dispath({ type: Types.addMensagem, payload: { mensagen } });
   }, []);
 
@@ -167,6 +170,7 @@ export const useAppReduce = () => {
       console.log("socket", socket.id);
     });
     socket.on("join", (data: any) => {
+      debugger;
       addMensagen({
         mensagem: `o usuario ${data?.user?.email} entrou nesse grupo`,
         id: new Date().getTime(),
@@ -174,8 +178,8 @@ export const useAppReduce = () => {
       });
     });
     socket.on("mensagem", (data: mensagem) => {
-      console.log("data", data);
-      addMensagen("receved", data);
+      debugger;
+      addMensagen(data);
     });
 
     return socket;

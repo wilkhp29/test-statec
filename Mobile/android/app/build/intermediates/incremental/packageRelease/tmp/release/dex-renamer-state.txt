@@ -1,0 +1,7 @@
+#Sun Nov 15 23:50:42 BRT 2020
+base.0=/Users/williamsantos/workroot/test/test-statec/Mobile/android/app/build/intermediates/dex/release/mergeDexRelease/out/classes.dex
+path.1=classes2.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=/Users/williamsantos/workroot/test/test-statec/Mobile/android/app/build/intermediates/dex/release/mergeDexRelease/out/classes2.dex

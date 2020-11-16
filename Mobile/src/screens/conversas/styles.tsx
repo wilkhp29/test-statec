@@ -16,11 +16,13 @@ export const My = styled.Text`
   text-align: right;
   color: white;
   background-color: ${color.primary};
+  margin-top: 5px;
 `;
 export const Other = styled.Text`
   padding: 10px;
   border-radius: 5px;
   background-color: greenyellow;
+  margin-top: 5px;
 `;
 export const All = styled.Text``;
 

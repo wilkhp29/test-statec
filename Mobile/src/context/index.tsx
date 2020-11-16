@@ -1,13 +1,19 @@
 import React, { createContext, useContext } from "react";
-import { init, startState, useAppReduce } from "../hooks/reduce";
+import {
+  grupo,
+  init,
+  mensagem,
+  startState,
+  useAppReduce,
+} from "../hooks/reduce";
 
 type ContextProp = {
   state: init;
   addMensagen: () => void;
-  addMensagens: () => void;
+  addMensagens: (mensagens: Array<mensagem>) => void;
   getGrupos: () => void;
   removeGrupo: () => void;
-  selectGrupo: () => void;
+  selectGrupo: (grupo: grupo) => void;
   setLoading: (loading: boolean) => void;
 };
 
