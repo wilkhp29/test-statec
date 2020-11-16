@@ -18,7 +18,7 @@ export interface grupo {
 
 interface mensagem {
   id: number;
-  mensagem: string;
+  mensagens: string;
   Usuario: user | null;
 }
 
@@ -82,7 +82,7 @@ const selectGrupo = (state: init, Grupo: grupo): init => {
 };
 
 const removeGrupo = (state: init, Grupo: grupo): init => {
-  return { ...state, Grupo: null };
+  return { ...state, Grupo: null, Mensagens: [] };
 };
 
 const addMensagens = (state: init, Mensagens: Array<mensagem>): init => {
@@ -90,7 +90,9 @@ const addMensagens = (state: init, Mensagens: Array<mensagem>): init => {
 };
 
 const addMensagen = (state: init, Mensagen: mensagem): init => {
-  const Mensagens = state.Mensagens;
+  const Mensagens = state.Mensagens.filter(
+    (mensagem) => JSON.stringify(mensagem) === JSON.stringify(Mensagen)
+  );
   Mensagens.push(Mensagen);
   return { ...state, Mensagens };
 };
@@ -172,6 +174,7 @@ export const useAppReduce = () => {
       });
     });
     socket.on("mensagem", (data: mensagem) => {
+      console.log("data", data);
       addMensagen("receved", data);
     });
 
